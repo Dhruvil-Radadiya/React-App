@@ -2,25 +2,32 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     const resultContainer = document.getElementById('result');
-    const reader = document.getElementById('reader');
 
-    const scanner = new Html5QrcodeScanner(reader.id, {
-        qrbox: { width: 250, height: 250 },
-        fps: 20,
-    });
+    function onScanSuccess(decodedText, decodedResult) {
+        try {
+            const qrData = JSON.parse(decodedText);
 
-    scanner.render(success, error);
-
-    function success(result) {
-        resultContainer.innerHTML = `
-            <h2>Success!</h2>
-            <p><a href="${result}">${result}</a></p>
-        `;
-        scanner.clear();
-        reader.remove();
+            if (qrData.tableNumber && qrData.menuPageLink) {
+                resultContainer.innerHTML = `<strong>Table Number:</strong> ${qrData.tableNumber}`;
+                setTimeout(() => {
+                    window.location.href = qrData.menuPageLink;
+                }, 3000); // Redirect after 3 seconds
+            } else {
+                resultContainer.innerHTML = `<strong>Error:</strong> Invalid QR Code data`;
+            }
+        } catch (error) {
+            resultContainer.innerHTML = `<strong>Error:</strong> Failed to parse QR Code data`;
+        }
     }
 
-    function error(err) {
-        console.error(err);
+    function onScanFailure(error) {
+        // You can choose to handle scan failure here, for example:
+        console.warn(`Code scan error: ${error}`);
     }
+
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+        "my-qr-reader", 
+        { fps: 10, qrbox: 250 }
+    );
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 });
