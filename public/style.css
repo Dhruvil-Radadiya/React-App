@@ -30,17 +30,17 @@ body {
     margin-top: 20px;
 }
 
-#my-qr-reader {
+#reader {
     padding: 20px;
     border: 1.5px solid #b2b2b2;
     border-radius: 8px;
 }
 
-#my-qr-reader img[alt="Info icon"] {
+#reader img[alt="Info icon"] {
     display: none;
 }
 
-#my-qr-reader img[alt="Camera based scan"] {
+#reader img[alt="Camera based scan"] {
     width: 100px !important;
     height: 100px !important;
 }
